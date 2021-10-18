@@ -38,6 +38,7 @@ client.on("messageCreate", message => {
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);
+
 app.use(express.static(__dirname + "/public/"));
 
 app.get("/", (req,res) => {

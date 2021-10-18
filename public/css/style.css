@@ -1,4 +1,20 @@
 body{
-	background: #508cfc;
-  filter: invert(100%);
+	--BG-COLOR: #508cfc;
+	background: var(--BG-COLOR);
+	color: #fff;
+	font-family: "Kulim Park";
+}
+
+::-webkit-scrollbar{
+	background: var(--BG-COLOR);
+	width: 12px;
+}
+
+::-webkit-scrollbar-thumb{
+	border-radius: 15px;
+	background: #94A1AB;
+}
+
+::-webkit-scrollbar-thumb:hover{
+	background: #707980;
 }

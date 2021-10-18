@@ -4,6 +4,6 @@ module.exports = new Command({
 	name: "website",
 	description: "Replies with the website link.",
 	callback(message,args,client){
-		message.channel.send("https://inspireimagineering.wixsite.com/hhn2021tpt2");
+		message.reply("Our dashboard can be found at https://inspirebot.thatghost.repl.co/");
 	}
 });
