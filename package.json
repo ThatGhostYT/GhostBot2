@@ -18,7 +18,8 @@
   "homepage": "https://github.com/ThatGhostYT/InspireBot#readme",
   "dependencies": {
     "discord.js": "^13.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security"
   },
   "devDependencies": {
     "jsdoc": "^3.6.7"
