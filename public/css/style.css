@@ -1,3 +1,4 @@
 body{
 	background: #508cfc;
+  filter: invert(100%);
 }

@@ -20,7 +20,7 @@ fs.readdirSync("./commands/")
 		client.commands.set(cmd.name,cmd);
 		console.log(`Command ${cmd.name} loaded!`);
 	});
-client.once("ready", () => console.log("Online"));
+client.once("ready", () => console.log("Inspire Bot Online"));
 
 client.on("messageCreate", message => {
 	if(message.channel.type === "dm") return;
