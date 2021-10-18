@@ -1,0 +1,26 @@
+{
+  "name": "inspirebot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "doc": "jsdoc -c jsdoc.json $1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThatGhostYT/InspireBot.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ThatGhostYT/InspireBot/issues"
+  },
+  "homepage": "https://github.com/ThatGhostYT/InspireBot#readme",
+  "dependencies": {
+    "discord.js": "^13.2.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "jsdoc": "^3.6.7"
+  }
+}
