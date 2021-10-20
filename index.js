@@ -29,13 +29,10 @@ fs.readdirSync("./commands/")
 			.setName(cmd.name)
 			.setDescription(cmd.details.description);
 		cmd.slash.forEach(arg => {
-			slashCmd.addStringOption(option => {
+			builder.addStringOption(option => {
 				option.setName(arg.name)
 					.setDescription(arg.description)
-					.setRequired(arg.required)
-				arg.choices.forEach(choice => {
-					option.addChoice(choice.name,choice.value);
-				});
+					.setRequired(arg.required);
 			});
 		});
 

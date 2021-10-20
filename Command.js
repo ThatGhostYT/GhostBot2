@@ -9,7 +9,6 @@ function CommandCallback(message,args,client){};
 
 module.exports = class{
 	/**
-	 * @typedef {{name: string, value: string}} Choice
 	 * @typedef {{name: string, description: string, required: boolean, type: Discord.ApplicationCommandOptionType, choices: Choice[]}} SlashCommandOptions
 	 * @typedef {{description: string, category: string}} Details
 	 * @typedef {{name: string, aliases: string[], details: Details, slash: SlashCommandOptions[], callback: CommandCallback}} CommandOptions
