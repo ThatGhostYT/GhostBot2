@@ -1,20 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
 body{
-	--BG-COLOR: #508cfc;
-	background: var(--BG-COLOR);
+	background: #508cfc;
 	color: #fff;
-	font-family: "Kulim Park";
-}
-
-::-webkit-scrollbar{
-	background: var(--BG-COLOR);
-	width: 12px;
-}
-
-::-webkit-scrollbar-thumb{
-	border-radius: 15px;
-	background: #94A1AB;
-}
-
-::-webkit-scrollbar-thumb:hover{
-	background: #707980;
+	font-family: Lato, sans-serif;
 }

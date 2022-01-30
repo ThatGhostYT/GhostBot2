@@ -1,16 +1,17 @@
 const express = require("express");
-const app = express();
 const Discord = require("discord.js");
-const client = new Discord.Client({
-	intents: 32767
-});
-
 const fs = require("fs");
 const {REST} = require("@discordjs/rest");
 const {Routes} = require("discord-api-types/v9");
-const {SlashCommandBuilder} = require("@discordjs/builders");
-
+const {SlashCommandBuilder,SlashCommandStringOption} = require("@discordjs/builders");
 const Command = require("./Command.js");
+
+const app = express();
+const client = new Discord.Client({
+	intents: [
+		"GUILDS"
+	]
+});
 
 const slash = [];
 client.commands = new Discord.Collection();
@@ -29,11 +30,11 @@ fs.readdirSync("./commands/")
 			.setName(cmd.name)
 			.setDescription(cmd.details.description);
 		cmd.slash.forEach(arg => {
-			builder.addStringOption(option => {
-				option.setName(arg.name)
-					.setDescription(arg.description)
-					.setRequired(arg.required);
-			});
+			let option = new SlashCommandStringOption()
+				.setName(arg.name)
+				.setDescription(arg.description)
+				.setRequired(arg.required);
+			builder.addStringOption(option);
 		});
 
 		slash.push(builder);
@@ -51,9 +52,9 @@ const rest = new REST({version: 9}).setToken(process.env.DISCORD_BOT_TOKEN);
 	}
 })();
 
-client.once("ready", () => console.log("Inspire Bot Online"));
+client.once("ready",() => console.log("Inspire Bot Online"));
 
-client.on("messageCreate", message => {
+client.on("messageCreate",message => {
 	if(message.channel.type === "dm") return;
 	if(message.author.bot) return;
 	if(!message.content.startsWith(process.env.DEF_PREFIX)) return;
@@ -72,9 +73,9 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 
 app.use(express.static(__dirname + "/public/"));
 
-app.get("/", (req,res) => {
+app.get("/",(req,res) => {
 	res.sendFile(__dirname + "/public/index.html");
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(port));
+app.listen(port,() => console.log(port));
