@@ -16,6 +16,6 @@ module.exports = new Command({
 		}
 	],
 	callback(message,args,client){
-		message.reply(`You said: \`${args.join(" ")}\``);
+		message.reply(`You said: \`${args.join(" ").replace("@", "")}\``);
 	}
 });
