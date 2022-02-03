@@ -7,10 +7,11 @@ module.exports = new Command({
 	aliases: ["website","web-dashboard","web"],
 	details: {
 		description: "Replies with the website link.",
-		category: "Other"
+		category: "Other",
+		syntax: "dashboard"
 	},
 	slash: [],
-	callback(message,args,client){
+	callback(message,args,client,prefix){
 		const row = new MessageActionRow()
 			.addComponents(
 				new MessageButton({

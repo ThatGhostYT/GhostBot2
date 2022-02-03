@@ -5,13 +5,17 @@ const {REST} = require("@discordjs/rest");
 const {Routes} = require("discord-api-types/v9");
 const {SlashCommandBuilder,SlashCommandStringOption} = require("@discordjs/builders");
 const Command = require("./Command.js");
+const db = new (require("@replit/database"));
 
 const app = express();
 const client = new Discord.Client({
-	intents: [
-		"GUILDS"
-	]
+	intents: 32767
 });
+
+let prefix;
+(async () => {
+	prefix = await db.get("prefix") || process.env.DEF_PREFIX;
+})();
 
 const slash = [];
 client.commands = new Discord.Collection();
@@ -39,7 +43,8 @@ fs.readdirSync("./commands/")
 
 		slash.push(builder);
 	});
-const rest = new REST({version: 9}).setToken(process.env.DISCORD_BOT_TOKEN);
+
+const rest = new REST({version: "9"}).setToken(process.env.DISCORD_BOT_TOKEN);
 
 (async () => {
 	try{
@@ -57,16 +62,16 @@ client.once("ready",() => console.log("Inspire Bot Online"));
 client.on("messageCreate",message => {
 	if(message.channel.type === "dm") return;
 	if(message.author.bot) return;
-	if(!message.content.startsWith(process.env.DEF_PREFIX)) return;
+	if(!message.content.startsWith(prefix)) return;
 
-	const args = message.content.substring(process.env.DEF_PREFIX.length).split(/ +/);
+	const args = message.content.substring(process.env.DEF_PREFIX.length).split(/\s+/);
 	const cmd = args.shift().toLowerCase();
 
 	const command = client.commands.get(cmd) || client.commands.find(a => a.aliases.includes(cmd));
 
 	if(!command) return message.reply(`Command \`${cmd}\` does not exist!`);
 
-	command.callback(message,args,client);
+	command.callback(message,args,client,prefix);
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);
