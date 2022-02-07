@@ -3,21 +3,21 @@ const {MessageActionRow,MessageButton} = require("discord.js");
 const Command = require("../Command.js");
 
 module.exports = new Command({
-	name: "dashboard",
-	description: "Replies with the website link.",
+	name: "invite",
+	description: "Sends bot invite url.",
 	slash: [],
 	callback(interaction,args,client,db,embedColor){
 		const row = new MessageActionRow()
 			.addComponents(
 				new MessageButton({
-					label: "Dashboard",
+					label: "Invite Me!",
 					style: "LINK",
-					url: "https://ghostbot.thatghost.repl.co/",
-					emoji: "🌐"
+					url: "https://discord.com/api/oauth2/authorize?client_id=819035442925010954&permissions=8&scope=bot%20applications.commands",
+					emoji: "🔗"
 				})
 			);
 		interaction.reply({
-			content: "Web dashboard",
+			content: "Invite me to your server.",
 			ephemeral: true,
 			components: [row]
 		});

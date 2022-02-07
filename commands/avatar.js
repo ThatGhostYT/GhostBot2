@@ -4,41 +4,45 @@ const Command = require("../Command.js");
 
 module.exports = new Command({
 	name: "avatar",
-	aliases: ["profile","pfp","profile-picture"],
-	details: {
-		description: "Shows a user\'s avatar.",
-		category: "Other",
-		syntax: "avatar ...users?"
-	},
-	slash: [],
-	callback(message,args,client,prefix){
+	description: "Shows a user\'s avatar.",
+	slash: [
+		{
+			name: "user",
+			description: "The user\'s pfp you want to see.",
+			required: false,
+			type: "USER"
+		}
+	],
+	callback(interaction,args,client,db,embedColor){
 		const embeds = [];
-		if(!message.mentions.users.size){
+
+		const user = args.getUser("user");
+
+		if(!user){
 			const embed = new MessageEmbed({
-				color: 0x0099ff
+				color: embedColor
 			})
-				.setTitle(message.author.username + "#" + message.author.discriminator)
-				.setImage(message.author.displayAvatarURL({
-					dynamic: true,
-					format: "png"
+				.setTitle(`${interaction.user.username}#${interaction.user.discriminator}`)
+				.setImage(interaction.user.displayAvatarURL({
+					format: "png",
+					dynamic: true
 				}));
 			embeds.push(embed);
 		} else{
-			for(const [id,user] of message.mentions.users){
-				const embed = new MessageEmbed({
-					color: 0x0099ff
-				})
-					.setTitle(user.username + "#" + user.discriminator)
-					.setImage(user.displayAvatarURL({
-						dynamic: true,
-						format: "png"
-					}));
-				embeds.push(embed);
-			}
+			const embed = new MessageEmbed({
+				color: embedColor
+			})
+				.setTitle(`${user.username}#${user.discriminator}`)
+				.setImage(user.displayAvatarURL({
+					format: "png",
+					dynamic: true
+				}));
+			embeds.push(embed);
 		}
 
-		message.reply({
-			embeds
+		interaction.reply({
+			embeds,
+			ephemeral: true
 		});
 	}
 });

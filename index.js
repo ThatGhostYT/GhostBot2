@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 const fs = require("fs");
 const {REST} = require("@discordjs/rest");
 const {Routes} = require("discord-api-types/v9");
-const {SlashCommandBuilder,SlashCommandStringOption} = require("@discordjs/builders");
+const {SlashCommandBuilder} = require("@discordjs/builders");
 const Command = require("./Command.js");
 const db = new (require("@replit/database"));
 
@@ -11,11 +11,6 @@ const app = express();
 const client = new Discord.Client({
 	intents: 32767
 });
-
-let prefix;
-(async () => {
-	prefix = await db.get("prefix") || process.env.DEF_PREFIX;
-})();
 
 const slash = [];
 client.commands = new Discord.Collection();
@@ -32,24 +27,101 @@ fs.readdirSync("./commands/")
 		
 		const builder = new SlashCommandBuilder()
 			.setName(cmd.name)
-			.setDescription(cmd.details.description);
+			.setDescription(cmd.description);
 		cmd.slash.forEach(arg => {
-			let option = new SlashCommandStringOption()
-				.setName(arg.name)
-				.setDescription(arg.description)
-				.setRequired(arg.required);
-			builder.addStringOption(option);
+			switch(arg.type){
+				case "STRING":
+					builder.addStringOption(option => {
+						option.setName(arg.name)
+							.setDescription(arg.description)
+							.setRequired(arg.required);
+						if(arg.choices){
+							for(const choice of arg.choices){
+								option.addChoice(choice.name,choice.value);
+							}
+						}
+						return option;
+					});
+					break;
+
+				case "INTEGER":
+					builder.addIntegerOption(option => {
+						option.setName(arg.name)
+							.setDescription(arg.description)
+							.setRequired(arg.required)
+						if(arg.choices){
+							for(const choice of arg.choices){
+								option.addChoice(choice.name,choice.value);
+							}
+						}
+						return option;
+					});
+					break;
+
+				case "NUMBER":
+					builder.addNumberOption(option => {
+						option.setName(arg.name)
+							.setDescription(arg.description)
+							.setRequired(arg.required)
+						return option;
+					});
+					break;
+
+				case "BOOLEAN":
+					builder.addBooleanOption(option => {
+						option.setName(arg.name)
+							.setDescription(arg.description)
+							.setRequired(arg.required)
+						return option;
+					});
+					break;
+
+				case "USER":
+					builder.addUserOption(option => {
+						option.setName(arg.name)
+							.setDescription(arg.description)
+							.setRequired(arg.required)
+						return option;
+					});
+					break;
+
+				case "CHANNEL":
+					builder.addChannelOption(option => {
+						option.setName(arg.name)
+							.setDescription(arg.description)
+							.setRequired(arg.required)
+						return option;
+					});
+					break;
+
+				case "ROLE":
+					builder.addRoleOption(option => {
+						option.setName(arg.name)
+							.setDescription(arg.description)
+							.setRequired(arg.required)
+						return option;
+					});
+					break;
+
+				case "MENTIONABLE":
+					builder.addMentionableOption(option => {
+						option.setName(arg.name)
+							.setDescription(arg.description)
+							.setRequired(arg.required)
+						return option;
+					});
+					break;
+			}
 		});
 
 		slash.push(builder);
 	});
-
 const rest = new REST({version: "9"}).setToken(process.env.DISCORD_BOT_TOKEN);
 
 (async () => {
 	try{
 		await rest.put(
-			Routes.applicationGuildCommands("871280132667604993","222078108977594368"),
+			Routes.applicationGuildCommands("819035442925010954","857558295358996480"),
 			{body: slash}
 		);
 	} catch(err){
@@ -57,22 +129,17 @@ const rest = new REST({version: "9"}).setToken(process.env.DISCORD_BOT_TOKEN);
 	}
 })();
 
-client.once("ready",() => console.log("Inspire Bot Online"));
+fs.readdirSync("./events/")
+	.filter(file => file.endsWith(".js"))
+	.forEach(file => {
+		const event = require(`./events/${file}`);
 
-client.on("messageCreate",message => {
-	if(message.channel.type === "dm") return;
-	if(message.author.bot) return;
-	if(!message.content.startsWith(prefix)) return;
-
-	const args = message.content.substring(process.env.DEF_PREFIX.length).split(/\s+/);
-	const cmd = args.shift().toLowerCase();
-
-	const command = client.commands.get(cmd) || client.commands.find(a => a.aliases.includes(cmd));
-
-	if(!command) return message.reply(`Command \`${cmd}\` does not exist!`);
-
-	command.callback(message,args,client,prefix);
-});
+		if(event.once){
+			client.once(event.name,(...args) => event.callback(client,...args));
+		} else{
+			client.on(event.name,(...args) => event.callback(client,...args));
+		}
+	});
 
 client.login(process.env.DISCORD_BOT_TOKEN);
 

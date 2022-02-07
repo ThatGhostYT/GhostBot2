@@ -1,0 +1,7 @@
+module.exports = {
+	name: "",
+	once: true/false,
+	callback(){
+		
+	}
+}

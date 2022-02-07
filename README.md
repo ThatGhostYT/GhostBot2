@@ -1,1 +1,1 @@
-# InspireBot
+# GhostBot
