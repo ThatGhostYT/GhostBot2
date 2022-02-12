@@ -317,11 +317,17 @@ module.exports = {
 			if(cmd.permission){
 				if(cmd.permission === "owner" && interaction.guild.ownerId !== interaction.user.id)
 					return interaction.reply({
-						content: "Only the owner of the server can use this command",
+						content: "Only the owner of the server can use this command.",
+						ephemeral: true
+					});
+
+				else if(!(await db.get(cmd.permission + "-" + interaction.guildId)) && interaction.guild.ownerId !== interaction.user.id)
+					return interaction.reply({
+						content: `Only the owner of the server can use this command until the ${cmd.permission} role is set.`,
 						ephemeral: true
 					});
 					
-				else if(!interaction.member.roles.cache.get(await db.get(cmd.permission + "-" + interaction.guildId)))
+				else if(!interaction.member.roles.cache.get(await db.get(cmd.permission + "-" + interaction.guildId)) && interaction.guild.ownerId !== interaction.user.id)
 					return interaction.reply({
 						content: `Only ${cmd.permission}s can use this command.`,
 						ephemeral: true

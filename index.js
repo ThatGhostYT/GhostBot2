@@ -5,7 +5,7 @@ const {REST} = require("@discordjs/rest");
 const {Routes} = require("discord-api-types/v9");
 const {SlashCommandBuilder} = require("@discordjs/builders");
 const Command = require("./Command.js");
-const db = new (require("@replit/database"));
+const db = new(require("@replit/database"));
 
 const app = express();
 const client = new Discord.Client({
@@ -121,7 +121,7 @@ const rest = new REST({version: "9"}).setToken(process.env.DISCORD_BOT_TOKEN);
 (async () => {
 	try{
 		await rest.put(
-			Routes.applicationGuildCommands("819035442925010954","857558295358996480"),
+			Routes.applicationGuildCommands("819035442925010954","940786085544464436"),
 			{body: slash}
 		);
 	} catch(err){
@@ -140,13 +140,16 @@ fs.readdirSync("./events/")
 			client.on(event.name,(...args) => event.callback(client,...args));
 		}
 	});
-
 client.login(process.env.DISCORD_BOT_TOKEN);
 
 app.use(express.static(__dirname + "/public/"));
 
 app.get("/",(req,res) => {
 	res.sendFile(__dirname + "/public/index.html");
+});
+
+app.get("/dashboard",(req,res) => {
+	res.sendFile(__dirname + "/public/dashboard.html");
 });
 
 const port = process.env.PORT || 3000;
