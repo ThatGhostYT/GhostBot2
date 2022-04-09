@@ -1,7 +1,7 @@
 module.exports = {
 	name: "",
 	once: true/false,
-	callback(){
-		
+	callback(client){
+		...
 	}
 }

@@ -13,14 +13,14 @@ module.exports = new Command({
 			type: "USER"
 		}
 	],
-	callback(interaction,args,client,db,embedColor){
+	async callback(interaction,args,client){
 		const embeds = [];
 
 		const user = args.getUser("user");
 
 		if(!user){
 			const embed = new MessageEmbed({
-				color: embedColor
+				color: await client.db.get(`embed-color-${interaction.guildId}`)
 			})
 				.setTitle(`${interaction.user.username}#${interaction.user.discriminator}`)
 				.setImage(interaction.user.displayAvatarURL({
@@ -30,7 +30,7 @@ module.exports = new Command({
 			embeds.push(embed);
 		} else{
 			const embed = new MessageEmbed({
-				color: embedColor
+				color: await client.db.get(`embed-color-${interaction.guildId}`)
 			})
 				.setTitle(`${user.username}#${user.discriminator}`)
 				.setImage(user.displayAvatarURL({

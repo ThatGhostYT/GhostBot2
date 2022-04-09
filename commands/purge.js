@@ -12,7 +12,7 @@ module.exports = new Command({
 			type: "INTEGER"
 		}
 	],
-	callback(interaction,args,client,db,embedColor){
+	async callback(interaction,args,client){
 		let num = args.getInteger("number");
 
 		if(isNaN(num) || num < 2 || num > 200) return interaction.reply({

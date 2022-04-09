@@ -13,13 +13,13 @@ module.exports = new Command({
 			type: "USER"
 		}
 	],
-	async callback(interaction,args,client,db,embedColor){
+	async callback(interaction,args,client){
 		const target = args.getUser("user") || interaction.user;
 
-		const warnings = await db.get(`warnings-${target.id}`);
+		const warnings = await client.db.get(`warnings-${target.id}-${interaction.guildId}`);
 
 		const embed = new MessageEmbed({
-			color: embedColor
+			color: await client.db.get(`embed-color-${interaction.guildId}`)
 		})
 			.setTitle(`${target.username}\'s warnings`)
 			.setDescription(`**${target.username}** has **${warnings === null ? 0 : warnings}** warnings.`)

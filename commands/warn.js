@@ -20,30 +20,34 @@ module.exports = new Command({
 			type: "STRING"
 		}
 	],
-	async callback(interaction,args,client,db,embedColor){
+	async callback(interaction,args,client){
 		const target = args.getUser("user");
 		const reason = args.getString("reason");
 
-		const warnings = await db.get(`warnings-${target.id}`) || 0;
+		const warnings = await client.db.get(`warnings-${target.id}`) || 0;
 
-		db.set(`warnings-${target.id}`,warnings + 1);
+		client.db.set(`warnings-${target.id}-${interaction.guildId}`,warnings + 1);
 
-		const logChannelId = await db.get(`log-channel-${interaction.guild.id}`);
+		const logChannelId = await client.db.get(`log-channel-${interaction.guild.id}`);
 
-		const embed = new MessageEmbed({
-			color: embedColor
-		})
-			.setTitle("Warning")
-			.setDescription(`**Target:** ${target.toString()}\n**Moderator:** ${interaction.user.toString()}\n**Reason:** \`${reason}\`\n**${target.username}** now has **${warnings + 1}** warnings`)
-			.setImage(target.displayAvatarURL({
-				format: "png",
-				dynamic: true
-			}));
-		interaction.guild.channels.cache.get(logChannelId).send({
-			embeds: [embed]
-		})
-			.then(m => {
-				interaction.reply(m.url);
+		interaction.reply({
+			content: `Member ${target} warned.`,
+			ephemeral: true
+		});
+		
+		if(logChannelId){
+			const embed = new MessageEmbed({
+				color: await client.db.get(`embed-color-${interaction.guildId}`)
+			})
+				.setTitle("Warning")
+				.setDescription(`**Target:** ${target.toString()}\n**Moderator:** ${interaction.user.toString()}\n**Reason:** \`${reason}\`\n**${target.username}** now has **${warnings + 1}** warnings`)
+				.setImage(target.displayAvatarURL({
+					format: "png",
+					dynamic: true
+				}));
+			interaction.guild.channels.cache.get(logChannelId).send({
+				embeds: [embed]
 			});
+		}
 	}
 });

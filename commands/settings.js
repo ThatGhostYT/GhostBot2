@@ -7,9 +7,9 @@ module.exports = new Command({
 	description: "Settings of the bot.",
 	permission: "admin",
 	slash: [],
-	callback(interaction,args,client,db,embedColor){
+	async callback(interaction,args,client){
 		const embed = new MessageEmbed({
-			color: embedColor
+			color: await client.db.get(`embed-color-${interaction.guildId}`)
 		})
 			.setTitle("Settings")
 			.setDescription("The settings is where you can configure your bot to what your server needs!")

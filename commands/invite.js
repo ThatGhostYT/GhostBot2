@@ -6,13 +6,13 @@ module.exports = new Command({
 	name: "invite",
 	description: "Sends bot invite url.",
 	slash: [],
-	callback(interaction,args,client,db,embedColor){
+	callback(interaction,args,client){
 		const row = new MessageActionRow()
 			.addComponents(
 				new MessageButton({
 					label: "Invite Me!",
 					style: "LINK",
-					url: "https://discord.com/api/oauth2/authorize?client_id=819035442925010954&permissions=8&scope=bot%20applications.commands",
+					url: "https://ghostbot.thatghost.repl.co/",
 					emoji: "🔗"
 				})
 			);
