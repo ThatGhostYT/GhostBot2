@@ -1,11 +1,12 @@
-const Command = require("../Command.js");
+const {SlashCommandBuilder} = require("@discordjs/builders");
 
-module.exports = new Command({
+module.exports = {
 	name: "",
+	aliases: [],
 	description: "",
-	permission: "",
-	slash: [],
-	callback(interaction,args,client){
+	slash: new SlashCommandBuilder(),
+	// slashOnly: true,
+	callback(client,interaction,args,isSlash){
 		...
 	}
-});
+}

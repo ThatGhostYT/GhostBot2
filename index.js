@@ -1,49 +1,36 @@
-const express = require("express");
-const Discord = require("discord.js");
-const fs = require("fs");
-const {REST} = require("@discordjs/rest");
-const {Routes} = require("discord-api-types/v9");
-const {SlashCommandBuilder} = require("@discordjs/builders");
-const Command = require("./Command.js");
-const db = new(require("@replit/database"));
-const hevents = require("./handlers/event.js");
-const hex = require("./handlers/exclusive.js");
-const hcommands = require("./handlers/command.js");
+const discord = require("discord.js");
+const {REST} = require('@discordjs/rest');
+const {Routes} = require('discord-api-types/v9');
+const fs = require("node:fs");
 
-const app = express();
-const client = new Discord.Client({
-	intents: 32767
+const client = new discord.Client({
+	intents: [
+		discord.Intents.FLAGS.GUILDS,
+		discord.Intents.FLAGS.GUILD_MESSAGES
+	],
+	allowedMentions: {
+		parsed: ["roles","users"]
+	}
 });
 
-client.commands = new Discord.Collection();
-client.db = db;
-
-const slash = hcommands(client);
-const exclusive = hex(client);
-hevents(client);
+client.commands = new discord.Collection();
+client.db = new (require("@replit/database"));
 
 const rest = new REST({version: "9"}).setToken(process.env.DISCORD_BOT_TOKEN);
 
+require("./handlers/events.js")(fs,client);
+
 (async () => {
-	try{
+	try {
 		await rest.put(
-			Routes.applicationCommands("819035442925010954"),
-			{body: slash}
-		);
-		await rest.put(
-			Routes.applicationGuildCommands("819035442925010954","940786085544464436"),
-			{body: exclusive}
-		);
-	} catch(err){
-		console.error(err);
+			Routes.applicationCommands("819035442925010954"), // client,guild
+			{
+				body: require("./handlers/commands.js")(fs,client)
+			}
+		)
+	} catch (error) {
+		console.error(error);
 	}
 })();
-
-app.get("/",(req,res) => {
-	res.redirect("https://discord.com/api/oauth2/authorize?client_id=819035442925010954&permissions=8&scope=bot%20applications.commands");
-});
-
-const port = process.env.PORT || 3000;
-app.listen(port,() => console.log(port));
 
 client.login(process.env.DISCORD_BOT_TOKEN);

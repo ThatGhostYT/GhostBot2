@@ -1,4 +1,13 @@
-const {MessageEmbed} = require("discord.js");
+const {
+	MessageEmbed,
+	MessageButton,
+	MessageActionRow
+} = require("discord.js");
+
+const Embed = require("../components/createEmbed.js");
+
+const prettyms = (...args) => import("pretty-ms")
+	.then(({default: pm}) => pm(...args));
 
 module.exports = {
 	name: "guildCreate",
@@ -20,22 +29,80 @@ module.exports = {
 			}
 		}
 
-		const owner = client.users.cache.find(u => u.id === guild.ownerId);
-		
-		const embed = new MessageEmbed({
-			color: await client.db.get(`embed-color-${guild.id}`)
-		})
-			.setTitle("Say hello to GhostBot!")
-			.setDescription("[**Bot Invite**](https://ghostbot.thatghost.repl.co/)\n[**Join Our Support Server!**](https://discord.gg/RfmtnCw5YQ)\n\nThis is a copy of the guide from the support server. The guide in the support server might be more up-to-date.")
-			.addField("Important!","If you ever have to remove GhostBot from your server, GhostBot automatically deletes all data saved from the server, Including: Evertheying in the `/settings` command and warnings.")
-			.addField("Viewing your Current Settings","To view your current settings, use `/currentsettings`.")
-			.addField("Cancelling Prompts","Whenever GhostBot is prompting you for something, if you type `cancel` the prompt is cancelled and you can send messages without GhostBot using them!")
-			.addField("Permissions","The first thing you want to do when you invite your bot is set permissions. To this use `/settings` and open the roles menu. There, select either admin or moderator and mention a role. Now whenever someone tries to use a command it checks to see if the user has that role.")
-			.addField("Log Channel","Next thing you want to do when you get GhostBot is to set a log channel. GhostBot will log special events here. To do this use `/settings` and open the channels menu. There, select log channel and mention the channel you want GhostBot to send messages to.")
-			.addField("Your all set!","Everything else on the `/settings` is optional.");
+		const startUsage = process.cpuUsage();
+		const now = Date.now();
+
+		while(Date.now() - now < 500);
+
+		const userUsage = (process.cpuUsage(startUsage).user / 1024).toFixed(1);
+		const sysUsage = (process.cpuUsage(startUsage).system / 1024).toFixed(1);
+
+		const embed = (await Embed(client,guild))
+			.setTitle("Say Hello to GhostBot!")
+			.setDescription("Thanks for inviting GhostBot to your server!")
+			.setThumbnail(client.user.displayAvatarURL({
+				format: "png",
+				dynamic: true
+			}))
+			.addFields(
+				{
+					name: "Commands",
+					value: client.commands.size.toString(),
+					inline: true
+				},
+				{
+					name: "Servers",
+					value: client.guilds.cache.size.toString(),
+					inline: true
+				},
+				{
+					name: "Uptime",
+					value: await prettyms(client.uptime),
+					inline: true
+				},
+				{
+					name: "Prefix",
+					value: "!",
+					inline: true
+				},
+				{
+					name: "Author",
+					value: "<@797291470457274378>",
+					inline: true
+				},
+				{
+					name: "Node Version",
+					value: process.version,
+					inline: true
+				},
+				{
+					name: "CPU Usage",
+					value: `**System:** ${sysUsage.toLocaleString()}mb\n**User:** ${userUsage.toLocaleString()}mb`,
+					inline: true
+				},
+				{
+					name: "Latency",
+					value: `${client.ws.ping}ms`,
+					inline: true
+				},
+				{
+					name: "Dependencies",
+					value: `\`\`\`json\n${JSON.stringify(require("../package.json").dependencies,null," ")}\`\`\``,
+				}
+			);
+
 		channel.send({
-			content: owner.toString(),
-			embeds: [embed]
+			content: `<@${guild.ownerId}> Thanks for inviting me! Use \`/help\` for help using commands.`,
+			embeds: [embed],
+			components: [
+				new MessageActionRow().addComponents(
+					new MessageButton()
+						.setLabel("Join the Support Server!")
+						.setStyle("LINK")
+						.setEmoji("🔗")
+						.setURL("https://discord.com/invite/RfmtnCw5YQ"),
+				)
+			]
 		});
 	}
 }
