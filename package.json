@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "doc": "jsdoc -c jsdoc.json $1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ThatGhostYT/InspireBot.git"
@@ -17,12 +14,13 @@
   },
   "homepage": "https://github.com/ThatGhostYT/InspireBot#readme",
   "dependencies": {
-    "@discordjs/builders": "^0.7.0",
+    "@discordjs/builders": "^0.15.0",
     "@discordjs/rest": "^0.1.0-canary.0",
     "@replit/database": "^2.0.1",
-    "discord-api-types": "^0.24.0",
-    "discord.js": "^13.10.3",
+    "discord-api-types": "^0.37.14",
+    "discord.js": "^13.12.0",
     "express": "^4.18.1",
+    "mathjs": "^11.3.0",
     "node-fetch": "^3.2.3",
     "pretty-ms": "^8.0.0"
   },

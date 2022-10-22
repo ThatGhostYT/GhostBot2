@@ -14,7 +14,7 @@ const client = new discord.Client({
 });
 
 client.commands = new discord.Collection();
-client.db = new (require("@replit/database"));
+client.db = new (require("./database/db.js"));
 
 const rest = new REST({version: "9"}).setToken(process.env.DISCORD_BOT_TOKEN);
 

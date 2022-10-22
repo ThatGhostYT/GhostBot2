@@ -14,6 +14,7 @@ module.exports = (fs,client) => {
 		commands.push(c.slash
 			.setName(c.name)
 			.setDescription(c.description)
+			.setDMPermission(false)
 			.toJSON()
 		);
 	}

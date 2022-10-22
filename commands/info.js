@@ -43,8 +43,8 @@ module.exports = {
 					inline: true
 				},
 				{
-					name: "Server Prefix",
-					value: await client.db.get(`prefix-${interaction.guildId}`),
+					name: "Discord.JS Version",
+					value: require("../package.json").dependencies["discord.js"].replace("^","v"),
 					inline: true
 				},
 				{
@@ -65,6 +65,11 @@ module.exports = {
 				{
 					name: "Latency",
 					value: `${client.ws.ping}ms`,
+					inline: true
+				},
+				{
+					name: "Platform",
+					value: process.platform,
 					inline: true
 				},
 				{

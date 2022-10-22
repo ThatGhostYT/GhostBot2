@@ -86,6 +86,11 @@ module.exports = {
 					inline: true
 				},
 				{
+					name: "Platform",
+					value: process.platform,
+					inline: true
+				},
+				{
 					name: "Dependencies",
 					value: `\`\`\`json\n${JSON.stringify(require("../package.json").dependencies,null," ")}\`\`\``,
 				}

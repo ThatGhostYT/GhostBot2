@@ -42,11 +42,9 @@ module.exports = {
 				ephemeral: isSlash
 			});
 		} else{
-			const p = await client.db.get(`prefix-${interaction.guildId}`) || "!";
-			
 			const embed = (await Embed(client,interaction.guild))
 				.setTitle("Help")
-				.setDescription(`Prefix is **${p}**\n` + client.commands.mapValues(v => {
+				.setDescription(client.commands.mapValues(v => {
 					return `> **${v.name}:** ${v.description}`
 				}).toJSON().join("\n"));
 
